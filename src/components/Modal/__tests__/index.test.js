@@ -1,36 +1,45 @@
-import React from "react";
-import { render, cleanup, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+// __tests__/Modal.test.js with hard coded categories
+import React from 'react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import Modal from '..';
 
+const mockToggleModal = jest.fn();
 const currentPhoto = {
-  name: "park bench",
-  category: "landscape",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adiscing elit. Nunc ultricie",
-  index: 1,
+  name: 'Park bench',
+  category: 'landscape',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultricie',
+  index: 1
 };
 
-describe("Modal component", () => {
-  it("renders", () => {
-    //baseline render component test
-  });
-  //snapshot test
-});
+afterEach(cleanup);
 
-describe("Click Event", () => {
-  it("calls onClose handler", () => {
-    //Arrange: Render Modal
-    const { getByText } = render(
-      <Modal on Close={mockToggleModal} currentPhoto={currentPhoto} />
-    );
-    //Act: Simulate click event
-    fireEvent.click(getByText("Close this modal"));
-    //Assert: Expected matcher
+describe('Modal component', () => {
+  it('renders', () => {
+    render(<Modal
+      onClose={mockToggleModal}
+      currentPhoto={currentPhoto}
+    />);
+  })
+
+  it('matches snapshot DOM node structure', () => {
+    const { asFragment } = render(<Modal
+      onClose={mockToggleModal}
+      currentPhoto={currentPhoto}
+    />);
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+})
+
+describe('Click Event', () => {
+  it('calls onClose handler', () => {
+    const { getByText } = render(<Modal
+      onClose={mockToggleModal}
+      currentPhoto={currentPhoto}
+    />);
+    fireEvent.click(getByText('Close this modal'))
+
     expect(mockToggleModal).toHaveBeenCalledTimes(1);
   });
-});
-
-it("matches snapshot DOM node structure", () => {
-  //Arrange the snapshot - declare variables
-  //Assert the match
-});
+})  
